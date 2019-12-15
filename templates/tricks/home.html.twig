@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+
+<main class="cover" role="main">
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1 id="title-home" class="display-3 text-white text-center">SNOWTRICKS</h1>
+      <h2 class="text-white text-center  mt-5 ">ALWAYS HIGHER</h2>
+      <p id="down" class="text-center mt-5"><a id="down" class="btn btn-primary btn-lg " href="#down" role="button"><i  class="fas fa-arrow-down fa-3x"></i>
+</a></p>
+    </div>
+  </div>
+
+</main>
+
+{% endblock %}
+
+
+{% block body %}
+
+<div class="row">
+
+
+
+     {% for trick in tricks %}
+    <article  class="col-md-3 mt-3">
+   <div class="card">
+  <img src="{{ asset('img/' ~ trick.image)}}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{ trick.title }}</h5>
+        <div class="metadata mb-2"><em>Ecrit le {{ trick.createdAt | date('d/m/y') }} à {{ trick.createdAt | date('h:i')}} dans la catégorie {{ trick.category.title }}</em></div>
+
+    <p class="card-text"> {{ trick.description | raw }}</p>
+  </div>
+     <a href="{{ path('trick_show', { slug: trick.slug }) }}" class="btn btn-link">lire la suite</a>
+ {% if app.user %}
+
+    
+ <div class="card-body">
+
+ <a  href="{{ path('trick_edit', { slug: trick.slug }) }}" class="btn btn-info"><i class="fas fa-pen"></i></a>
+
+<a href="{{ path('trick_delete', { slug: trick.slug }) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+
+  
+  
+</div>
+
+    {% endif %}
+ 
+</article>
+{% endfor %}
+
+
+
+</div>
+
+<a href="#" id="loadmore">Load More</a>
+    
+<p id="top">
+  <a href="#top">Go To Top</a>
+</p>
+
+   {% block javascripts %}
+        
+<script>
+/*global $, document, alert, console*/
+$(function () {
+	"use strict";
+    $('article').slice(0, 4).show();
+    $('#loadmore').on('click', function (e) {
+        e.preventDefault();
+        $('article:hidden').slice(0, 8).slideDown();
+        if ($('article:hidden').length === 0) {
+            $('#loadmore').replaceWith("<p class='p'>No More</p>");
+        }
+    });
+    $('#top').on('click', function (e) {
+        e.preventDefault();
+        $('html, body').animate({
+            scrollTop: 0
+        }, 600);
+        return false;
+    });
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 50) {
+            $('#top a').fadeIn();
+        } else {
+            $('#top a').fadeOut();
+        }
+    });
+});
+</script>
+
+        {% endblock %}
+
+{% endblock %}
+
+
+  
